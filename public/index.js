@@ -36,7 +36,7 @@ function getUserLocation(callback) {
             var location = {
                 lat: latitude,
                 long: longitude
-            }
+            };
             callback(location);
         },
         function(error) {
@@ -68,10 +68,10 @@ function initBotConversation() {
         domain: domain
     });
     const styleOptions = {
-        botAvatarImage: 'https://docs.microsoft.com/en-us/azure/bot-service/v4sdk/media/logo_bot.svg?view=azure-bot-service-4.0',
+        botAvatarImage: 'https://www.tasmc.org.il/corona/PublishingImages/TASMC_logo.jpg',
         // botAvatarInitials: '',
         // userAvatarImage: '',
-        hideSendBox: false, /* set to true to hide the send box from the view */
+        hideSendBox: true, /* set to true to hide the send box from the view */
         botAvatarInitials: 'Bot',
         userAvatarInitials: 'You',
         backgroundColor: '#F8F8F8'
@@ -85,27 +85,15 @@ function initBotConversation() {
                 payload: {
                     activity: {
                         type: "invoke",
-                        name: "InitConversation",
+                        name: "TriggerScenario",
                         locale: user.locale,
                         value: {
-                            // must use for authenticated conversation.
-                            jsonWebToken: jsonWebToken,
-
-                            // Use the following activity to proactively invoke a bot scenario
-                            /*
-                            triggeredScenario: {
-                                trigger: "{scenario_id}",
-                                args: {
-                                    myVar1: "{custom_arg_1}",
-                                    myVar2: "{custom_arg_2}"
-                                }
-                            }
-                            */
+                            trigger: "covid19_triage_new",
+                            args: {}
                         }
                     }
                 }
             });
-
         }
         else if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
             if (action.payload && action.payload.activity && action.payload.activity.type === "event" && action.payload.activity.name === "ShareLocationEvent") {
@@ -117,6 +105,9 @@ function initBotConversation() {
                     });
                 });
             }
+            setTimeout(function () {
+                document.querySelector('div.css-y1c0xs').scrollTop = document.querySelector('div.css-y1c0xs').scrollHeight
+            });
         }
         return next(action);
     }}});
